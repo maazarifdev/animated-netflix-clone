@@ -10,14 +10,11 @@
 :root {
   --red: #e50914;
   --red-dark: #b20710;
-  --purple-deep: #1a0030;
-  --purple-mid: #3d0a60;
   --bg: #141414;
   --card-bg: #28133a;
   --text: #ffffff;
   --text-muted: #bbbbbb;
-  --page-pad: clamp(20px, 5vw, 80px);
-  --radius: 12px;
+  --page-pad: clamp(16px, 5vw, 80px);
   --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -35,15 +32,17 @@ body {
   overflow-x: hidden;
 }
 
+p { color: var(--text); margin: 0; padding: 0; }
+
 /* ══════════════════════════════════════════
-   SCROLL BAR
+   SCROLLBAR
 ══════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #1a1a1a; }
 ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
 
 /* ══════════════════════════════════════════
-   NAV
+   NAV — desktop layout exactly preserved
 ══════════════════════════════════════════ */
 nav {
   height: 70px;
@@ -93,10 +92,7 @@ nav span img { width: 100%; height: auto; }
   align-items: center;
   gap: 6px;
   font-size: 14px;
-}
-
-.button .lang{
-  padding: 7px 6px;
+  padding: 7px 10px;
 }
 
 .button .sign { font-size: 15px; }
@@ -108,39 +104,75 @@ nav span img { width: 100%; height: auto; }
 }
 
 /* ══════════════════════════════════════════
+   STICKY NAV
+══════════════════════════════════════════ */
+nav.nav-sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-width: 100%;
+  padding: 0 5vw;
+  height: 56px;
+  background: rgba(20,20,20,0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+/* ══════════════════════════════════════════
    MAIN HERO
+   KEY FIXES:
+   1. min-height: 100svh  → real height on mobile
+      (100vh includes browser address bar on mobile,
+       100svh excludes it — no gap at bottom)
+   2. background-attachment: scroll  → "fixed" causes
+      black bg on iOS Safari, scroll is safe everywhere
+   3. background-size: cover  → always fills correctly
+   4. background-position: center center  → never cuts
 ══════════════════════════════════════════ */
 .main {
   background-image: url("../assets/background-image/bg.jpg");
-  min-height: 100vh;
+  min-height: 100svh;
   position: relative;
-  background-position: center;
+  background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: scroll;
   display: flex;
   flex-direction: column;
+}
+
+/* Fallback for browsers that don't support svh */
+@supports not (min-height: 100svh) {
+  .main { min-height: 100vh; }
 }
 
 /* dark overlay */
 .box {
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.5) 0%,
-    rgba(0,0,0,0.65) 60%,
-    rgba(20,20,20,0.95) 100%
+    rgba(0,0,0,0.45) 0%,
+    rgba(0,0,0,0.65) 55%,
+    rgba(20,20,20,0.98) 100%
   );
   position: absolute;
   inset: 0;
   z-index: 0;
 }
 
+/* ══════════════════════════════════════════
+   HERO TEXT
+══════════════════════════════════════════ */
 .main-text {
   z-index: 10;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 28px;
+  gap: 24px;
   flex-direction: column;
   color: white;
   text-align: center;
@@ -155,21 +187,22 @@ nav span img { width: 100%; height: auto; }
 }
 
 .main-text h1 {
-  font-size: clamp(28px, 5vw, 56px);
+  font-size: clamp(26px, 4.5vw, 56px);
   font-weight: 900;
   line-height: 1.15;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+  text-shadow: 0 2px 16px rgba(0,0,0,0.7);
   animation: fadeUp 0.9s 0.1s ease both;
 }
 
 .main-text > p {
-  font-size: clamp(16px, 2vw, 22px);
+  font-size: clamp(15px, 2vw, 22px);
   font-weight: 500;
   animation: fadeUp 0.9s 0.2s ease both;
+  color: white;
 }
 
 .main-text h3 {
-  font-size: clamp(14px, 1.5vw, 17px);
+  font-size: clamp(13px, 1.4vw, 17px);
   font-weight: 500;
   color: rgba(255,255,255,0.85);
   animation: fadeUp 0.9s 0.3s ease both;
@@ -188,7 +221,7 @@ nav span img { width: 100%; height: auto; }
 .data input {
   background-color: rgba(0,0,0,0.5);
   border: 1px solid rgba(255,255,255,0.5);
-  padding: 18px 20px;
+  padding: 16px 20px;
   width: clamp(200px, 28%, 380px);
   border-radius: 4px;
   color: white;
@@ -206,10 +239,10 @@ nav span img { width: 100%; height: auto; }
 
 .data button {
   border-radius: 4px;
-  padding: 18px 24px;
+  padding: 16px 22px;
   background-color: var(--red);
   color: white;
-  font-size: clamp(16px, 1.5vw, 22px);
+  font-size: clamp(15px, 1.5vw, 22px);
   font-weight: 700;
   cursor: pointer;
   border: none;
@@ -227,7 +260,7 @@ nav span img { width: 100%; height: auto; }
 }
 
 /* ══════════════════════════════════════════
-   BULGE / HERO CURVE
+   BULGE CURVE
 ══════════════════════════════════════════ */
 .hero {
   position: relative;
@@ -258,29 +291,13 @@ nav span img { width: 100%; height: auto; }
 .curve-mask { height: 110px; }
 
 /* ══════════════════════════════════════════
-   PAGE 2  — shared alignment variable
+   PAGE 2
 ══════════════════════════════════════════ */
-.page2 { --page-pad: clamp(20px, 5vw, 80px); }
-
-/* ── Section headings ── */
-.section-heading {
-  color: var(--text);
-  font-size: clamp(18px, 2.5vw, 26px);
-  font-weight: 700;
-  padding: 24px var(--page-pad) 10px;
-  margin: 0;
-  opacity: 0;
-  transform: translateX(-20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.section-heading.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
+.page2 { --page-pad: clamp(16px, 5vw, 80px); }
 
 /* ── Trending label ── */
 .trending-label {
+  display: block;
   color: var(--text);
   font-size: clamp(18px, 2.5vw, 26px);
   font-weight: 700;
@@ -288,7 +305,7 @@ nav span img { width: 100%; height: auto; }
   margin: 0;
 }
 
-/* ── Trending / cards ── */
+/* ── Trending cards ── */
 .trending {
   position: relative;
   background: var(--bg);
@@ -307,15 +324,14 @@ nav span img { width: 100%; height: auto; }
 .cards-row::-webkit-scrollbar { height: 4px; }
 
 .card {
-  flex: 0 0 clamp(130px, 14vw, 210px);
-  height: clamp(180px, 22vw, 290px);
+  flex: 0 0 clamp(120px, 14vw, 210px);
+  height: clamp(170px, 22vw, 290px);
   border-radius: 6px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
   scroll-snap-align: start;
   transition: transform var(--transition), box-shadow var(--transition);
-  /* scroll-reveal */
   opacity: 0;
   transform: translateY(24px);
 }
@@ -342,7 +358,6 @@ nav span img { width: 100%; height: auto; }
   overflow: visible;
 }
 
-/* Card overlay on hover */
 .card::after {
   content: '';
   position: absolute;
@@ -359,7 +374,7 @@ nav span img { width: 100%; height: auto; }
   position: absolute;
   bottom: 6px;
   left: 2px;
-  font-size: clamp(48px, 7vw, 82px);
+  font-size: clamp(44px, 7vw, 82px);
   font-weight: 900;
   color: #000;
   -webkit-text-stroke: 2.5px rgba(255,255,255,0.85);
@@ -370,22 +385,14 @@ nav span img { width: 100%; height: auto; }
   text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 
-.card .n-logo {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 14px;
-  z-index: 10;
-}
-
-/* ── Reasons section ── */
+/* ── Reasons ── */
 .reasons-label {
+  display: block;
   color: var(--text);
   font-size: clamp(18px, 2.5vw, 26px);
-  font-weight: 550;
+  font-weight: 600;
   padding: 40px var(--page-pad) 16px;
   margin: 0;
-  display: block;
 }
 
 .reasons {
@@ -406,7 +413,6 @@ nav span img { width: 100%; height: auto; }
   cursor: default;
   position: relative;
   transition: transform var(--transition), box-shadow var(--transition);
-  /* scroll-reveal */
   opacity: 0;
   transform: translateY(30px);
 }
@@ -416,7 +422,6 @@ nav span img { width: 100%; height: auto; }
   transform: translateY(0);
 }
 
-/* shimmering top border */
 .boxes::before {
   content: '';
   position: absolute;
@@ -442,7 +447,7 @@ nav span img { width: 100%; height: auto; }
 }
 
 .boxes h3 {
-  font-size: clamp(17px, 1.6vw, 23px);
+  font-size: clamp(16px, 1.6vw, 23px);
   font-weight: 700;
   color: var(--text);
   line-height: 1.35;
@@ -496,7 +501,6 @@ nav span img { width: 100%; height: auto; }
   transform: translateY(0);
 }
 
-/* The accordion button */
 .questions button.margin {
   display: flex;
   align-items: center;
@@ -507,7 +511,7 @@ nav span img { width: 100%; height: auto; }
   background-color: #2d2d2d;
   color: white;
   font-family: inherit;
-  font-size: clamp(15px, 1.6vw, 20px);
+  font-size: clamp(14px, 1.6vw, 20px);
   font-weight: 500;
   padding: 20px 28px;
   border-radius: 6px;
@@ -519,7 +523,6 @@ nav span img { width: 100%; height: auto; }
 
 .questions button.margin:hover { background-color: #3a3a3a; }
 
-/* icon rotates when open */
 .questions button.margin .faq-icon {
   flex-shrink: 0;
   transition: transform 0.4s ease;
@@ -530,14 +533,12 @@ nav span img { width: 100%; height: auto; }
 .questions button.margin[aria-expanded="true"] { background-color: #3a3a3a; }
 .questions button.margin[aria-expanded="true"] .faq-icon { transform: rotate(45deg); }
 
-/* Answer panel */
 .faq-answer {
   max-height: 0;
   overflow: hidden;
   background-color: #2d2d2d;
   border-radius: 0 0 6px 6px;
-  transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.3s ease;
+  transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease;
   margin-top: -6px;
   padding: 0 28px;
 }
@@ -549,7 +550,7 @@ nav span img { width: 100%; height: auto; }
 
 .faq-answer p {
   color: var(--text-muted);
-  font-size: clamp(14px, 1.3vw, 17px);
+  font-size: clamp(13px, 1.3vw, 17px);
   line-height: 1.7;
   padding: 0;
   margin: 0;
@@ -564,11 +565,11 @@ footer { background: var(--bg); border-top: 1px solid #2a2a2a; }
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 50px 0 30px;
+  padding: 50px 20px 30px;
 }
 
 .input {
-  gap: 18px;
+  gap: 16px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -582,6 +583,7 @@ footer { background: var(--bg); border-top: 1px solid #2a2a2a; }
   padding: 0;
   color: var(--text);
   margin: 0;
+  text-align: center;
 }
 
 .input input {
@@ -609,7 +611,7 @@ footer { background: var(--bg); border-top: 1px solid #2a2a2a; }
   padding: 14px 26px;
   background-color: var(--red);
   color: white;
-  font-size: clamp(16px, 1.4vw, 22px);
+  font-size: clamp(15px, 1.4vw, 22px);
   font-weight: 700;
   cursor: pointer;
   border: none;
@@ -660,12 +662,12 @@ footer { background: var(--bg); border-top: 1px solid #2a2a2a; }
 .footer-column a:hover { color: #ffd741; padding-left: 5px; }
 
 /* ══════════════════════════════════════════
-   TOAST NOTIFICATION
+   TOAST
 ══════════════════════════════════════════ */
 .toast {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 24px;
+  right: 24px;
   background: #1f1f1f;
   border-left: 4px solid var(--red);
   color: white;
@@ -682,78 +684,91 @@ footer { background: var(--bg); border-top: 1px solid #2a2a2a; }
   max-width: 320px;
 }
 
-.toast.show {
-  transform: translateY(0);
-  opacity: 1;
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — TABLET  ≤ 900px
+══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  nav { max-width: 92vw; }
+
+  .reasons { grid-template-columns: repeat(2, 1fr); }
+
+  .footer-right { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ══════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — MOBILE  ≤ 600px
+   Desktop nav layout preserved — only font
+   sizes and logo width reduce slightly
 ══════════════════════════════════════════ */
+@media (max-width: 600px) {
 
-/* Tablet: 2-col reasons */
-@media (max-width: 900px) {
-  .reasons {
-    grid-template-columns: repeat(2, 1fr);
+  /* Nav — keep same flex layout, just shrink */
+  nav {
+    max-width: 95vw;
+    height: 58px;
   }
 
-  .footer-right {
-    grid-template-columns: repeat(2, 1fr);
+  nav span { width: 78px; }
+
+  .button { gap: 8px; }
+
+  .button button {
+    font-size: 12px;
+    padding: 6px 10px;
   }
 
-  nav { max-width: 95vw; }
-}
+  .button .lang {
+    font-size: 11px;
+    padding: 6px 8px;
+    gap: 4px;
+  }
 
-/* Mobile: single col */
-@media (max-width: 580px) {
-  .main-text { padding: 40px 16px 60px; }
+  /* Hero text */
+  .main-text {
+    padding: 50px 16px 70px;
+    gap: 18px;
+  }
 
+  /* Email input+button stack vertically */
   .data {
     flex-direction: column;
     align-items: stretch;
-    padding: 0 16px;
+    padding: 0 12px;
+    gap: 10px;
   }
 
-  .data input { width: 100%; }
-  .data button { justify-content: center; }
+  .data input  { width: 100%; padding: 14px 16px; }
+  .data button { width: 100%; justify-content: center; padding: 14px; }
 
-  .reasons { grid-template-columns: 1fr; }
-
-  .footer-right { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-
-  .input input { width: 85%; }
-
+  /* Cards */
   .cards-row { gap: 8px; }
 
-  nav span { width: 90px; }
+  /* Reason boxes: single column */
+  .reasons { grid-template-columns: 1fr; gap: 12px; }
 
-  .button button { font-size: 13px; padding: 6px 10px; }
+  /* Footer */
+  .footer-right { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .footer-container { padding: 20px 16px 40px; width: 100%; }
+  .input input { width: 90%; }
 
-  .down { margin-left: 0; align-self: flex-end; }
+  /* Toast full width on mobile */
+  .toast {
+    right: 12px;
+    left: 12px;
+    max-width: 100%;
+    bottom: 16px;
+    font-size: 14px;
+  }
 }
-
-@media (max-width: 380px) {
-  .footer-right { grid-template-columns: 1fr; }
-}
-
-/* global p safety reset */
-p { color: var(--text); }
 
 /* ══════════════════════════════════════════
-   STICKY NAV (added via JS class)
+   RESPONSIVE — SMALL MOBILE  ≤ 380px
 ══════════════════════════════════════════ */
-nav.nav-sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  max-width: 100%;
-  padding: 0 5vw;
-  height: 56px;
-  background: rgba(20, 20, 20, 0.97);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  transition: all 0.3s ease;
+@media (max-width: 380px) {
+  .footer-right { grid-template-columns: 1fr; }
+
+  /* On very small screens hide lang text, keep globe icon */
+  .button .lang span.lang-text { display: none; }
 }
