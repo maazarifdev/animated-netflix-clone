@@ -36,4 +36,19 @@ A **fully responsive front-end clone of Netflix**, built with modern **HTML, CSS
 
 ---
 
-#
+## 🎨 Design & UX Highlights
+
+- Smooth **hover animations** on cards and boxes
+- Cinematic **SVG hero curves** with glow effects
+- **Scroll-reveal animations** for a modern dynamic feel
+- **Shimmering borders** for “More Reasons” boxes
+- **Accessible design** with semantic HTML & `aria` attributes
+
+---
+
+## 📱 Responsive Layout
+
+- Desktop: Multi-column layout with 4 “More Reasons” boxes
+- Tablet: 2-column layout
+- Mobile: Single-column layout with stacked cards & sections
+- Hero section scales with viewport using **clamp** & **fluid typography**
